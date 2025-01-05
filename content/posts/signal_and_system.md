@@ -7,11 +7,14 @@ cover:
   alt: 'Signal and System'
 params:
   math: true
+tags: ['Signal and System','Engineering']
+categories: 'Notes'
+description: 'Note for signal and system'
+summary: "Signal and System"
 ---
 
-# Signal and system
  
-Semester: 2023 Spring  
+修課學期: 2023 Spring  
 
 # Table of contents
 
@@ -561,14 +564,14 @@ x(t) = e^{j\omega t}\\
 g[n] = e^{j\Omega n}
 $$
 
-Suppose we force \(g[n] = x(nT_s)\( where \(T_s\) is the sampling period.
+Suppose we force \(g[n] = x(nT_s)\) where \(T_s\) is the sampling period.
 
 $$
 e^{j\Omega n} = e^{j\omega(nT_s)}\\
 \Omega = \omega T_s
 $$
 
-\(\Omega\( is fixed to the multiple of \(T_s\(.
+\(\Omega\) is fixed to the multiple of \(T_s\).
 
 The DTFT of the signal is:
 
@@ -576,7 +579,7 @@ $$
 X(e^{j\Omega}) = \sum_{n = -\infty}^\infty x[n]e^{-j\Omega n}
 $$
 
-plug \(\Omega = \omega T_s\(:
+plug \(\Omega = \omega T_s\):
 
 $$
 X_\delta({j\omega}) = \sum_{n = -\infty}^\infty x[n]e^{-j\omega T_sn}
@@ -598,7 +601,7 @@ In summary, we are dealing with converting a discrete signal to continuous signa
 
 # Sampling
 
-This section deals with converting a signal from a continuous time \(x_\delta(t)\( to discrete time (\(x[n]\().
+This section deals with converting a signal from a continuous time \(x_\delta(t)\) to discrete time (\(x[n]\)).
 
 $$
 x_\delta(t) = \sum_{n = -\infty}^\infty x[n]\delta(t-nT_s) = x_\delta(t) = \sum_{n = -\infty}^\infty x(nT_s)\delta(t-nT_s)\\
@@ -619,7 +622,7 @@ Let’s find the FT representation of \(p(t)\).
 
 ### Conclusion
 
-The FT of the sampled signal is given by an infinite sum of shifted versions of \(X(j\omega)\(.
+The FT of the sampled signal is given by an infinite sum of shifted versions of \(X(j\omega)\).
 
 $$
 x_\delta(t) = x(t)\sum_{n = -\infty}^\infty \delta(t-nT_s) = x(t)p(t)\\

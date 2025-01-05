@@ -1,6 +1,6 @@
 baseURL: ""
 languageCode: en-us
-title: My New Hugo Site
+title: Benchang's Blog
 theme: PaperMod
 markup:
   goldmark:
@@ -16,5 +16,102 @@ markup:
           - - \(
             - \)
         enable: true
+  highlight:
+    noClasses: false
+    anchorLineNos: true
+    codeFences: true
+    guessSyntax: true
+    lineNos: true
 params:
   math: true
+  description: "A blog about everything and nothing."
+  keywords: [Blog, Portfolio, PaperMod]
+  DateFormat: "January 2, 2006" # 設定時間顯示格式
+  defaultTheme: auto # dark, light
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true # 顯示複製code的按鈕
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  comments: false
+  hidemeta: false
+  hideSummary: false
+  showtoc: false
+  tocopen: false
+
+  assets:
+    disableHLJS: true # to disable highlight.js
+    disableFingerprinting: true
+    favicon: "<link / abs url>"
+    favicon16x16: "<link / abs url>"
+    favicon32x32: "<link / abs url>"
+    apple_touch_icon: "<link / abs url>"
+    safari_pinned_tab: "<link / abs url>"
+
+  label:
+    text: "Benchang's Blog"
+
+
+  # profile-mode
+  profileMode:
+    enabled: false # needs to be explicitly set
+    title: ExampleSite
+    subtitle: "This is subtitle"
+    imageUrl: "<img location>"
+    imageWidth: 120
+    imageHeight: 120
+    imageTitle: my image
+    buttons:
+      - name: Posts
+        url: posts
+      - name: Tags
+        url: tags
+
+  # home-info mode
+  homeInfoParams: # 設定主頁資訊
+    Title: "Hi there 👋"
+    Content: A blog about everything and nothing.
+
+  socialIcons: # 設定社群相關連結
+    - name: github
+      url: "https://github.com/Benchangatrul284"
+    - name: email
+      url: "mailto:ptst1110.ee10@nycu.edu.tw"
+
+  # for search
+  # https://fusejs.io/api/options.html
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
+    keys: ["title", "permalink", "summary", "content"]
+menu: # 設定右上角頁面選項
+  main:
+    - identifier: categories
+      name: Categories
+      url: /categories/
+      weight: 10
+    - identifier: tags
+      name: Tags
+      url: /tags/
+      weight: 20
+    - identifier: search # 要加上content/search.md
+      name: Search
+      url: /search/
+      weight: 30
+outputs: # 如果要search的話要有以下設定
+  home:
+    - HTML
+    - RSS
+    - JSON # necessary for search
