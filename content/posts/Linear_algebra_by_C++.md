@@ -7,7 +7,7 @@ cover:
   alt: 'linear algebra'
 params:
   math: true
-tags: ['linear_algebra','Engineering']
+tags: ['Linear Algebra','Engineering']
 categories: 'Code'
 description: 'Implementation of linear algebra calculator by C++'
 summary: "Implementation of linear algebra calculator by C++"

@@ -7,7 +7,7 @@ cover:
   alt: 'Linear algebra'
 params:
   math: true
-tags: ['Linear algebra','Engineering']
+tags: ['Linear Algebra','Engineering']
 categories: 'Notes'
 description: 'Note for Linear algebra'
 summary: "Linear algebra"
