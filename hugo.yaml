@@ -61,9 +61,9 @@ params:
 
   # profile-mode
   profileMode:
-    enabled: false # needs to be explicitly set
-    title: ExampleSite
-    subtitle: "This is subtitle"
+    enabled: true # needs to be explicitly set
+    title: "Benchang's Blog"
+    subtitle: "A blog about everything and nothing."
     imageUrl: "<img location>"
     imageWidth: 120
     imageHeight: 120
@@ -71,8 +71,10 @@ params:
     buttons:
       - name: Posts
         url: posts
-      - name: Tags
-        url: tags
+      - name: Projects
+        url: projects
+      - name: Notes
+        url: notes
 
   # home-info mode
   homeInfoParams: # 設定主頁資訊
