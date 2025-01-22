@@ -27,7 +27,7 @@ params:
   description: "A blog about everything and nothing."
   keywords: [Blog, Portfolio, PaperMod]
   DateFormat: "January 2, 2006" # 設定時間顯示格式
-  defaultTheme: auto # dark, light
+  defaultTheme: dark # dark, light
   disableThemeToggle: false
 
   ShowReadingTime: true
@@ -64,9 +64,9 @@ params:
     enabled: true # needs to be explicitly set
     title: "Benchang's Blog"
     subtitle: "A blog about everything and nothing."
-    imageUrl: "<img location>"
-    imageWidth: 120
-    imageHeight: 120
+    imageUrl: "self.png"
+    imageWidth: 240
+    imageHeight: 240
     imageTitle: my image
     buttons:
       - name: Posts
