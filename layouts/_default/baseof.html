@@ -10,6 +10,8 @@
     {{ if .Param "math" }}
     {{ partialCached "math.html" . }}
     {{ end }}
+    <!-- Other head elements -->
+    <link rel="stylesheet" href="{{ "css/styles.css" | relURL }}">
 </head>
 
 <body class="

@@ -29,7 +29,7 @@ params:
   DateFormat: "January 2, 2006" # 設定時間顯示格式
   defaultTheme: dark # dark, light
   disableThemeToggle: false
-
+  
   ShowReadingTime: true
   ShowShareButtons: true
   ShowPostNavLinks: true
@@ -58,7 +58,8 @@ params:
   label:
     text: "Benchang's Blog"
 
-
+  cover:
+    hiddenInList: true
   # profile-mode
   profileMode:
     enabled: true # needs to be explicitly set
