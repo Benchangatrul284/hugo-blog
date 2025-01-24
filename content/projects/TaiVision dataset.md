@@ -1,6 +1,6 @@
 ---
 date: '2025-01-05T17:15:59+08:00'
-title: 'TaiVision Dataset Preperation'
+title: 'TaiVision Dataset Preparation'
 draft: false
 cover:
   image: 'img/TaiVision/cover.png'
@@ -16,8 +16,7 @@ weight: 20
 
 
 ## Introduction
-目前在 huggingface 找不到繁體中文的文字加圖片的 dataset，倒是英文的蠻多的，但是格式都蠻亂的 (圖片要額外去其他地方下載)。要訓練一個繁體中文的視覺語言模型之前，一定要先取得適合的資料集。我們會利用 [Taiwan LLaMA](yentinglin/Llama-3-Taiwan-8B-Instruct-128k) 做翻譯，然後再加上整理後的圖片，方便之後訓練模型。
-
+目前在 huggingface 找不到繁體中文的文字加圖片的 dataset，倒是英文的蠻多的，但是格式都蠻亂的 (圖片要額外去其他地方下載)。要訓練一個繁體中文的視覺語言模型之前，一定要先取得適合的資料集。我們會利用 [Taiwan LLaMA](https://huggingface.co/yentinglin/Llama-3-Taiwan-8B-Instruct-128k) 做翻譯，然後再加上整理後的圖片，方便之後訓練模型。
 ## Dataset
 - [TaiVision-pretrain-1M-v1.0](#TaiVision-pretrain-1M-v1.0)
   - [LLaVA-Pretrain](#LLaVA-Pretrain)
@@ -210,7 +209,7 @@ def remove_refusal(sample):
 
 
 ## [TaiVision-pretrain-1M-v2.0](https://huggingface.co/datasets/benchang1110/TaiVision-pretrain-1M-v2.0)
-這個 dataset 的回答比較長，作為第二步的 feature alignment。assistant 的 respond 依舊和 prompt 沒有關係。
+這個 dataset 的回答比較長，作為第二步的 feature alignment。Assistant 的 respond 依舊和 prompt 沒有關係。
 ```
 [ { "content": "描述圖片發生了甚麼事", "role": "user" }, { "content": "在圖片的中心，一個充滿活力的藍色午餐盤的四個容器裡都裝滿了各種食物。這四個容器中，有兩個是粉紅色的，另外兩個是黃色的，它們排列成2x2的網格。\n\n在頂部左邊的粉紅色容器裡，一片麵包躺著，輕輕地塗上奶油，撒上一把杏仁。麵包被切成矩形，杏仁散落在奶油的表面上。\n\n旁邊在頂部右角的另一個粉紅色容器裡，一種水果混合物。切片的蘋果，白色的內部暴露在外，與多汁的鳳梨塊共享空間。蘋果片和鳳梨塊的顏色與粉紅色的容器形成美麗的對比。\n\n在它們下面的底部左角，藍色盤的黃色容器裡有一個肉丸和一些花椰菜。圓而棕色的肉丸與充滿活力的綠色花椰菜花朵相鄰。\n\n最後，在藍色盤的底部右角，有一個甜點 - 一個巧克力豆餅乾。金黃色的餅乾上點綴著巧克力豆，它們的暗色與餅乾較淺的表面形成鮮明對比。\n\n這些容器在藍色盤上的排列創造了一個視覺上吸引人且平衡的餐點，每個組成部分都整齊地分開，但又成為一個有機整體的一部分。", "role": "assistant" } ]
 ```
