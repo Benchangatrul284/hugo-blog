@@ -288,7 +288,7 @@ if __name__ == '__main__':
     model.load_state_dict(sd)
     model.save_pretrained("reordered_model")
 ```
-
+  
 ### 測試模型
 
 
