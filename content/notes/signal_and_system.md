@@ -7,7 +7,7 @@ cover:
   alt: 'Signal and System'
 params:
   math: true
-tags: ['Signal and System','Engineering']
+tags: ['Signal and System']
 categories: 'Notes'
 description: 'Note for signal and system'
 summary: "Signal and System"

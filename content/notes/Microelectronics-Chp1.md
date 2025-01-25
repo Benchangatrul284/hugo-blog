@@ -7,7 +7,7 @@ cover:
   alt: 'Microelectronics Chapter 1 -- Introduction'
 params:
   math: true
-tags: ['Microelectronics','Engineering']
+tags: ['Microelectronics']
 categories: 'Notes'
 description: 'Notes for Microelectronics'
 summary: "Microelectronics Chapter 1 -- Introduction"
