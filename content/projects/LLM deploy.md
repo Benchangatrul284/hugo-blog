@@ -9,8 +9,8 @@ params:
   math: true
 tags: ['TinyLLaMA']
 categories: 'Project'
-description: 'Paper of Matformer initialization of Taiwan SLM'
-summary: "Paper of Matformer initialization of Taiwan SLM"
+description: 'Deploying LLM with Chat UI and vLLM'
+summary: "Deploying LLM with Chat UI and vLLM"
 weight: 10
 ---
 
@@ -97,7 +97,3 @@ MODELS=`[
 npm run host
 ```
 
-
-# Evaluation
-```bash
-lm_eval 
