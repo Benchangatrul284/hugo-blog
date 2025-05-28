@@ -65,17 +65,24 @@ summary: "紀錄博愛校區的好店和雷店"
 {{< /rawhtml >}}
 
 ### [瑞斯飯糰](https://maps.app.goo.gl/7GcLkzSv24FnDhgN8)
-* 推薦: ★★★☆☆
+* 推薦: ★★☆☆☆
 * 地址: 新竹市東區博愛街27號
 * 營業時間: 禮拜天有開，只開到中午。
 * 心得: 飯糰很有特色，但其他品項略低於平均值，中午去有機會送多出來的三明治。
 
 ## 學府路
 ### [幸福屋早餐坊](https://maps.app.goo.gl/mf56mvH2ouPju2vP7)
-* 推薦: ★☆☆☆☆
+* 推薦: ★★★☆☆
 * 地址: 新竹市東區學府路92號
 * 營業時間: 每天都有開，只開到中午。
-* 心得: 店內只有兩個座位(在煎台旁邊)，所以都是外帶，價格便宜，但食物份量小且油膩，墨西哥捲餅小的誇張。另外裝食物的容器相當詭異，烤土司會用塑膠袋裝，優點是饅頭肉排蛋比無名早餐店多送個飲料，但除此之外沒有其他優點了，盡是缺點。
+* 心得: 店內只有兩個座位(在煎台旁邊)，價格便宜。很推饅頭肉排蛋很推，加紅茶只要 65 塊。紅茶非常非常甜。但是蛋餅份量少且比較油膩。另外裝食物的容器相當詭異，烤土司會用塑膠袋裝。墨西哥捲餅還可以，只是裡面的香腸很鹹。簡單來說，只推薦點饅頭肉排蛋。
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/幸福屋早餐坊1.jpg" width="350">
+  <img src="/img/EAT/幸福屋早餐坊2.jpg" width="350">
+</div>
+{{< /rawhtml >}}
 
 
 ### [弘爺漢堡 (學府路)](https://maps.app.goo.gl/cAb9KfF36ASz32MHA)
@@ -93,7 +100,7 @@ summary: "紀錄博愛校區的好店和雷店"
 
 ### [無名早餐店](https://maps.app.goo.gl/bvttidqUhRVrNT9A8)
 * 推薦: ★★★☆☆
-* 地址: 300新竹市東區學府路112號
+* 地址: 新竹市東區學府路112號
 * 營業時間: 禮拜二沒開，只開到中午。
 * 心得: 內用位子少，價格偏貴，大概要 100 多才吃得飽。但味道還不錯，饅頭肉排蛋是招牌，挺好吃的，蛋餅也還不錯。店內有時候會有貓咪在門口!
 
@@ -167,7 +174,7 @@ summary: "紀錄博愛校區的好店和雷店"
 
 ### [呷尚寶](https://maps.app.goo.gl/g6n8CuPpyya8jmpH6)
 * 推薦: ★★☆☆☆
-* 地址: 300新竹市東區食品路178號
+* 地址: 新竹市東區食品路178號
 * 營業時間: 每天都有開，開到下午一點。
 * 心得: 有麥味登的價格但沒有麥味登的品質。飲料甚至比麥味登貴。菜單選擇少，上菜速度慢，服務態度不佳。食物就普普通通，是一家只值得去一次的早餐店。
 
@@ -181,40 +188,192 @@ summary: "紀錄博愛校區的好店和雷店"
 # 午晚餐
 
 ## 學府路
-### 丐幫滷味
+### [丐幫滷味](https://maps.app.goo.gl/J7zrie47c116UEeg8)
 * 推薦: ★★★★★
-* 地址: 
+* 地址: 新竹市東區學府路321號1樓
 * 營業時間: 禮拜六沒有開。
 * 心得: 這家我每個禮拜必吃兩到三次。他的滷味偏向湯麵，湯頭帶一點中藥味。品質穩定，價格也便宜。青菜只要 20 元，買 120 會送肉片，內用有紅茶可以喝。是一家非常穩定且優質的好店。
 
-### 狀元香滷味
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/丐幫滷味1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [狀元香滷味](https://maps.app.goo.gl/FEoCUh9LockSoyms6)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路116號
+* 營業時間: 中午沒有開，晚上會開到很晚(宵夜時間)
+* 心得: 這家滷味味道比丐幫稍微重一點，滷味是乾的，價格比丐幫稍微貴一點，店內位子比較少，如果外帶人很多的話需要等一陣子(因為只有一個老闆在煮)，滿 80 員會送飲料，像是可樂、蘋果汁之類的。 是一家可以和丐幫交替吃的滷味店。
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/狀元香滷味1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [安德烈廚房](https://maps.app.goo.gl/DodH7ymoYMW9k4nXA)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路319號
+* 營業時間: 
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/安德烈廚房1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [臭臉麵店](https://maps.app.goo.gl/Adkr39fnYx2rgvTc9)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路289號
+* 營業時間: 每天都會開，晚上只開到七點。
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/臭臉麵店1.jpg" style="max-width: 350px; height: auto;">
+  <img src="/img/EAT/臭臉麵店2.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [成都冒菜](https://maps.app.goo.gl/dBjgPxbqsT5kQDJbA)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路84之1號
+* 營業時間: 禮拜天沒開。
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/成都冒菜1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [壺子拳餐飲](https://maps.app.goo.gl/1aJ8VHBQzMJhQgUo6)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路80號
+* 營業時間: 禮拜天沒開。
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/壺子拳餐飲1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [楊家滷肉飯](https://maps.app.goo.gl/4NJnfQHqsfumr8QP7)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路215號
+* 營業時間: 禮拜天沒開。
+* 心得: 
+
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/楊家滷肉飯1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [阿寶魯肉飯](https://maps.app.goo.gl/WepbtTX6fYTEuzF6A)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路165號
+* 營業時間: 禮拜天沒開。
+* 心得: 
+
+### [日光手作食堂](https://maps.app.goo.gl/W1wVAhEP8Pq6jmjX8)
 * 推薦: ★★★★☆
 * 地址: 
-* 營業時間: 中午沒有開，晚上會開到很晚(宵夜時間)
-* 心得: 這家滷味味道比丐幫稍微重一點，滷味是乾的，價格比丐幫稍微貴一點，店內位子比較少，如果外帶人很多的話需要等一陣子(因為只有一個老闆在煮)，滿 80 員會送飲料，像是可樂、蘋果汁之類的。 是一家可以和丐幫交替的吃的滷味店。
+* 營業時間: 禮拜三沒開。
+* 心得: 
 
-### 安德烈廚房
-### 臭臉麵店
-### 成都冒菜
-### 壺子拳餐飲
-### 楊家滷肉飯
-### 阿寶魯肉飯
-### 日光手作食堂
-### 竹美港式茶餐廳
-### 學府牛肉麵
-### 初盅
-### 富珍鄉豬腳專賣店
-### 湘月食堂
-### 廚種
-### 保善齋素食
-### 東和自助餐
+### [竹美港式茶餐廳](https://maps.app.goo.gl/mkwS4vtcaCpM7ThJ6)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路73號
+* 營業時間: 每天都有開。
+* 心得: 
+
+### [學府牛肉麵](https://maps.app.goo.gl/4Upr5w8hL6zg4DFM7)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路106號
+* 營業時間: 禮拜三沒開。
+* 心得: 
+
+### [初盅](https://maps.app.goo.gl/vwXX9QADhBf2JMfS6)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路156號1樓
+* 營業時間: 禮拜天沒開。
+* 心得: 
+
+### [富珍鄉豬腳專賣店](https://maps.app.goo.gl/raQB2eoiEtvzptoH8)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路359號
+* 營業時間: 禮拜六日沒開。
+* 心得: 
+
+### [湘月食堂](https://maps.app.goo.gl/bJj2qUkj2AhBdywQ6)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路126號
+* 營業時間: 禮拜一、二沒開。
+* 心得: 
+
+### [廣華燒臘](https://maps.app.goo.gl/zWga4Q4iqqgEZpVW7)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路66號
+* 營業時間: 禮拜一、二沒開。
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/廣華燒臘1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [廚種](https://maps.app.goo.gl/ccZe9Tb5iEdBwCmE9)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路313號1號
+* 營業時間: 禮拜六沒開。
+* 心得: 
+
+### [保善齋素食](https://maps.app.goo.gl/25SakQp95eY5CEFd8)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區學府路309號
+* 營業時間: 禮拜六日沒開，只開中午。
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/保善齋素食1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [東和自助餐](https://maps.app.goo.gl/w1b293MkSqxt7Xr77)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區東山街10號
+* 營業時間: 只開中午。
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/東和自助餐1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
 
 ## 博愛街
-### 茉莉小鎮
-### 哩賀巴西小館
+### [茉莉小鎮](https://maps.app.goo.gl/Ap1YzKAEwwt9pUwK8)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區博愛街114號
+* 營業時間: 
+* 心得: 
+
+### [哩賀巴西小館](https://maps.app.goo.gl/oRixfBtb9ef7hk898)
+* 推薦: ★★★★☆
+* 地址: 新竹市東區博愛街94巷2號
+* 營業時間: 
+* 心得: 
+
 ### [璽子牛肉麵](https://maps.app.goo.gl/LvZi9eK9JR2F6x3r8)
 * 推薦: ★★★★☆
-* 地址: 300新竹市東區博愛街31號
+* 地址: 新竹市東區博愛街31號
 * 營業時間: 禮拜二沒開。
 * 心得: 這家店應該是博愛校區附近最有名的店了。來博愛校區的第一餐就是吃這家的牛肉麵。湯和麵的分量不多，吃完覺得很空虛。第二次來改點牛肉捲餅，非常的乾且蛋花湯竟然要 70 塊，幾乎變成拒絕往來戶。但有一天朋友揪我，我就打算再給他後一次機會復盤。後來發現這家店需要特殊吃法才能發揮出他一碗牛肉麵的 160 的價值。推薦點一個清燉牛肉麵加和朋友分牛肉捲餅。牛肉麵撇除麵和湯偏少，肉其實給得很大塊而且很軟，湯有自己的味道，喜歡因人而異。牛肉捲餅一定要配辣油，香味整個會提上來，沒有辣油就和咬橡皮筋差不多。
 
@@ -226,29 +385,128 @@ summary: "紀錄博愛校區的好店和雷店"
 {{< /rawhtml >}}
 
 ## 食品路
-### 老陳牛肉麵
-### 鹿野土雞湯拉麵
-### 麵堂拉麵專賣店
-### 甘泉魚麵
-### 韓家炒飯
-### 大呼過癮
-### 上野匠烤肉飯
-### 正典鮮蝦餛飩麵
-### 黃燜雞米飯
-### 噴火美式炭烤牛排
-### 好室鍋物
-### 赤火堯碳烤牛排
-### 卡莎米義大利麵
+
+### [老陳牛肉麵](https://maps.app.goo.gl/XuoLUesJ1k2z7gcM7)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路112號
+* 營業時間: 
+* 心得: 
+
+{{< rawhtml >}}
+<div style="display: flex; gap: 10px;">
+  <img src="/img/EAT/老陳牛肉麵1.jpg" style="max-width: 350px; height: auto;">
+</div>
+{{< /rawhtml >}}
+
+### [鹿野土雞湯拉麵](https://maps.app.goo.gl/im8FkXoKyonXmoNX9)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區東南街156號
+* 營業時間: 
+* 心得: 
+
+### [麵堂拉麵專賣店](https://maps.app.goo.gl/4x5dnqZK1W4GW8BQA)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路223號
+* 營業時間: 
+* 心得: 
+
+### [甘泉魚麵](https://maps.app.goo.gl/K63rcPrtyxep7xgB8)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路171號
+* 營業時間: 
+* 心得: 
+
+### [韓家炒飯](https://maps.app.goo.gl/g9VCpup77JUqtQg77)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路174號
+* 營業時間: 
+* 心得: 
+
+### [大呼過癮](https://maps.app.goo.gl/QAkkjrvUtW3ZcSyN6)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路125號
+* 營業時間: 
+* 心得: 
+
+### [上野匠烤肉飯](https://maps.app.goo.gl/GPNxXKEFYL2bNag98)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路138號
+* 營業時間: 
+* 心得: 
+
+### [正典鮮蝦餛飩麵](https://maps.app.goo.gl/6xf11pAsqFrrgRkM8)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區培英街6號
+* 營業時間: 
+* 心得: 
+
+### [黃燜雞米飯](https://maps.app.goo.gl/g1W6FFDHiJX4R18s9)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路101號
+* 營業時間: 
+* 心得: 
+
+### [噴火美式炭烤牛排](https://maps.app.goo.gl/6PJZd1LvVTdqn8Pq7)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路51號
+* 營業時間: 
+* 心得: 
+
+### [卡莎米義大利麵](https://maps.app.goo.gl/9iQPV8916wWvqd9o7)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區東南街185號
+* 營業時間: 
+* 心得: 
+
 
 ## 水源街
-### 如意麵食館
-### 文湯武醬
-### 七保炸醬麵
-### 金元寶水餃大王
+### [如意麵食館](https://maps.app.goo.gl/sJrk5gUavvDEdayZ9)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區光復路二段746號
+* 營業時間: 
+* 心得: 
+
+### [文湯武醬](https://maps.app.goo.gl/BnXmLwwpHwZKQcdz6)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區水源街59號
+* 營業時間: 
+* 心得: 
+
+### [七保炸醬麵](https://maps.app.goo.gl/WwaSmxS5cMuj2oX89)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區水源街23號
+* 營業時間: 
+* 心得: 
+
+### [金元寶水餃大王](https://maps.app.goo.gl/1zJA7bFB4usUaffZ9)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區水源街68號
+* 營業時間: 
+* 心得: 
 
 
 # 點心
-### 米玥麻糬堂
-### 富爺脆皮紅豆餅
-### 小叮噹豆花
-### 開源社
+### [米玥麻糬堂](https://maps.app.goo.gl/qvPuLLvKxHNcGmyZ6)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區食品路59號
+* 營業時間: 
+* 心得: 
+
+### [富爺脆皮紅豆餅](https://maps.app.goo.gl/UUzNNzNtDpGYS67V9)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區東山街9號
+* 營業時間: 
+* 心得: 
+
+### [小叮噹豆花](https://maps.app.goo.gl/58dsmoxxLLJ22Efd6)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區博愛街28號
+* 營業時間: 
+* 心得: 
+
+### [開源社](https://maps.app.goo.gl/cu3r6FMJmHoaNWNF6)
+* 推薦: ★★★★☆
+* 地址: 300新竹市東區東山街34號
+* 營業時間: 
+* 心得: 
+
