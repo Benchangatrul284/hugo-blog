@@ -1,7 +1,7 @@
 ---
 date: '2025-01-05T17:15:59+08:00'
 title: 'Taiwan TinyLLaMA MatFormer'
-draft: false
+draft: True
 cover:
   image: 'img/tinyllama/cover.png'
   alt: 'cover.png'
