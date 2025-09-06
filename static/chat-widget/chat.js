@@ -45,7 +45,7 @@
       <div class="cw-messages" aria-live="polite"></div>
       <div class="cw-input">
         <input type="text" placeholder="Type your question..." />
-        <button type="button">Send</button>
+        <button type="button" title="Send">🚀</button>
       </div>
       <div class="cw-controls-bottom">
         <label for="cw-model">Model</label>
