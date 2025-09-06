@@ -1,5 +1,5 @@
 {
-  "proxy_url": "http://localhost:8787/api/chat",
+  "proxy_url": "/api/chat",
   "model": "deepseek/deepseek-chat-v3.1:free",
   "temperature": 0.2
 }
