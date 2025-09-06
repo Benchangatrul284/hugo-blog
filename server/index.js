@@ -53,13 +53,15 @@ app.post('/api/chat', async (req, res) => {
     const m = typeof model === 'string' && model.trim() ? model : 'openrouter/anthropic/claude-3.5-sonnet';
     const temp = typeof temperature === 'number' ? temperature : 0.2;
 
+    // Ensure header values are ASCII to satisfy undici ByteString requirement
+    const toAscii = (v) => String(v || '').replace(/[^\x00-\x7F]/g, '');
     const headers = {
       'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
+      // OpenRouter recommends these headers for attribution
+      'HTTP-Referer': toAscii(referer || req.headers['referer'] || ''),
+      'X-Title': toAscii(title || ''),
     };
-    // OpenRouter recommends these headers for attribution
-    headers['HTTP-Referer'] = referer || req.headers['referer'] || '';
-    headers['X-Title'] = title || '';
 
     const orRes = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',
