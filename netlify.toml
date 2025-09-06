@@ -4,8 +4,12 @@
 
 [[redirects]]
   from = "/api/chat"
-  to = "/.netlify/functions/chat"
+  to = "/.netlify/functions/chat" # fallback when Edge is unavailable
   status = 200
+
+[[edge_functions]]
+  path = "/api/chat"
+  function = "chat-edge"
 
 
 [build.environment]
