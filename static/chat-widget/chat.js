@@ -99,12 +99,9 @@
     scrollToBottom();
 
     // Guard config
-    if (!config || !config.openrouter_api_key) {
+    if (!config) {
       loading.remove();
-      addMessage(
-        "assistant",
-        "Chat is not configured. Please set openrouter_api_key and model in /chat-widget/config.json."
-      );
+      addMessage("assistant", "Chat is not configured. Please ensure /chat-widget/config.json exists.");
       return;
     }
 
@@ -119,31 +116,46 @@
     }, 350);
 
     try {
-      const res = await fetch(`${config.api_base || "https://openrouter.ai/api/v1"}/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${config.openrouter_api_key}`,
-          "Content-Type": "application/json",
-          // Optional but recommended by OpenRouter
-          "HTTP-Referer": location.href,
-          "X-Title": document.title,
-        },
-        body: JSON.stringify({
-          model: config.model,
-          temperature: config.temperature ?? 0.2,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You answer questions strictly using the provided page content. If the answer is not present, say you don’t have enough information from this page.",
-            },
-            {
-              role: "user",
-              content: `Page content (for grounding):\n${pageContext}\n\nQuestion: ${userText}`,
-            },
-          ],
-        }),
-      });
+      const payload = {
+        model: config.model,
+        temperature: config.temperature ?? 0.2,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You answer questions strictly using the provided page content. If the answer is not present, say you don’t have enough information from this page.",
+          },
+          {
+            role: "user",
+            content: `Page content (for grounding):\n${pageContext}\n\nQuestion: ${userText}`,
+          },
+        ],
+        referer: location.href,
+        title: document.title,
+      };
+
+      let res;
+      if (config.proxy_url) {
+        res = await fetch(config.proxy_url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+      } else if (config.openrouter_api_key) {
+        // Fallback: direct call (not recommended for production)
+        res = await fetch(`${config.api_base || "https://openrouter.ai/api/v1"}/chat/completions`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${config.openrouter_api_key}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": location.href,
+            "X-Title": document.title,
+          },
+          body: JSON.stringify(payload),
+        });
+      } else {
+        throw new Error("No proxy_url or API key provided in config");
+      }
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
