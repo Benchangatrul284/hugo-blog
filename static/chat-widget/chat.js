@@ -94,11 +94,41 @@
     modelSelect = panel.querySelector(".cw-model");
     newBtn = panel.querySelector(".cw-new");
 
+    const placeWidget = () => {
+      const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      if (vw <= 640) {
+        panel.style.right = `calc(12px + env(safe-area-inset-right, 0px))`;
+        panel.style.left = 'auto';
+        panel.style.width = `min(95vw, 420px)`;
+        toggleBtn.style.right = `calc(16px + env(safe-area-inset-right, 0px))`;
+        toggleBtn.style.left = 'auto';
+      } else {
+        panel.style.right = '20px';
+        panel.style.left = 'auto';
+        panel.style.width = '400px';
+        toggleBtn.style.right = '20px';
+        toggleBtn.style.left = 'auto';
+      }
+    };
+
     toggleBtn.addEventListener("click", () => {
       const open = panel.style.display === "flex";
-      panel.style.display = open ? "none" : "flex";
+      if (open) {
+        panel.style.display = "none";
+      } else {
+        panel.style.display = "flex";
+        placeWidget();
+        const rect = panel.getBoundingClientRect();
+        const viewportW = window.innerWidth || document.documentElement.clientWidth;
+        if (rect.right > viewportW) {
+          const overflow = rect.right - viewportW;
+          const currentRight = parseInt(getComputedStyle(panel).right) || 20;
+          panel.style.right = Math.max(8, currentRight + overflow + 8) + 'px';
+        }
+      }
       if (!open) inputEl.focus();
     });
+    window.addEventListener('resize', placeWidget);
 
     inputEl.addEventListener("keydown", (e) => {
       if (e.key === "Enter") send();

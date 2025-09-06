@@ -17,7 +17,7 @@
 
 .cw-panel {
   position: fixed;
-  bottom: 110px;
+  bottom: 200px;
   right: 20px;
   width: 400px;
   max-height: 60vh;
@@ -127,6 +127,24 @@
   word-break: break-word;
   align-self: flex-start; /* default left side */
 }
+
+/* Markdown elements */
+.cw-msg .cw-text code {
+  background: rgba(0,0,0,0.06);
+  padding: 0 4px;
+  border-radius: 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+.cw-msg .cw-text pre {
+  background: rgba(0,0,0,0.06);
+  padding: 10px;
+  border-radius: 8px;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.cw-msg .cw-text pre code { background: transparent; padding: 0; }
+.cw-msg .cw-text ul, .cw-msg .cw-text ol { margin: 0.5em 0 0.5em 1.2em; padding: 0; }
+.cw-msg .cw-text a { color: #2563eb; text-decoration: underline; }
 
 .cw-msg.user .cw-edit {
   display: inline-block;
