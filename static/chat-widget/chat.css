@@ -80,14 +80,14 @@
   white-space: pre-wrap;
 }
 
-/* User on left */
-.cw-msg.user {
+/* Assistant on left */
+.cw-msg.assistant {
   margin-right: auto;
   background: var(--entry, #f3f4f6);
 }
 
-/* Assistant on right */
-.cw-msg.assistant {
+/* User on right */
+.cw-msg.user {
   margin-left: auto;
   background: #e6f0ff;
 }
@@ -111,6 +111,5 @@
 
 /* Respect PaperMod dark theme */
 html.dark .cw-panel { background: var(--theme, #0b0f19); }
-html.dark .cw-msg.user { background: #111827; color: #e5e7eb; }
-html.dark .cw-msg.assistant { background: #112240; color: #e5e7eb; }
-
+html.dark .cw-msg.assistant { background: #111827; color: #e5e7eb; }
+html.dark .cw-msg.user { background: #112240; color: #e5e7eb; }
