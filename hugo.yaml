@@ -45,6 +45,7 @@ params:
   hideSummary: false
   showtoc: false
   tocopen: false
+  services.googleAnalytics.id: "G-EPGB6VC8JG" # replace with your Google Analytics ID
 
   assets:
     disableHLJS: true # to disable highlight.js

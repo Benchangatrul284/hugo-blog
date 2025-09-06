@@ -1,0 +1,16 @@
+{{/* Google Analytics (GA4) snippet for PaperMod.
+     Reads ID from services.googleAnalytics.ID.
+     Loads only when this partial is called (theme gates it to production).
+*/}}
+{{- with site.Config.Services.GoogleAnalytics.ID }}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ . }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);} // eslint-disable-line
+  gtag('js', new Date());
+  gtag('config', '{{ . }}');
+  // To enable IP anonymization, use:
+  // gtag('config', '{{ . }}', { 'anonymize_ip': true });
+  // and update your consent/cookies accordingly.
+</script>
+{{- end }}
