@@ -4,9 +4,17 @@
 
 (function () {
   const CONFIG_URL = "/chat-widget/config.json";
+  const REQUEST_TIMEOUT_MS = 25000; // 25s
 
   let config = null;
   let panel, toggleBtn, messagesEl, inputEl, sendBtn;
+
+  function fetchWithTimeout(resource, options = {}, timeout = REQUEST_TIMEOUT_MS) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    const opts = { ...options, signal: controller.signal };
+    return fetch(resource, opts).finally(() => clearTimeout(id));
+  }
 
   async function loadConfig() {
     try {
@@ -136,14 +144,14 @@
 
       let res;
       if (config.proxy_url) {
-        res = await fetch(config.proxy_url, {
+        res = await fetchWithTimeout(config.proxy_url, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
       } else if (config.openrouter_api_key) {
         // Fallback: direct call (not recommended for production)
-        res = await fetch(`${config.api_base || "https://openrouter.ai/api/v1"}/chat/completions`, {
+        res = await fetchWithTimeout(`${config.api_base || "https://openrouter.ai/api/v1"}/chat/completions`, {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${config.openrouter_api_key}`,
@@ -167,7 +175,7 @@
       console.error(err);
       clearInterval(dotsTimer);
       loading.remove();
-      addMessage("assistant", `Error while calling model: ${err.message}`);
+      addMessage("assistant", "Sorry, We are having a problem");
     }
   }
 
