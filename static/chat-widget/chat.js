@@ -50,7 +50,7 @@
       <div class="cw-controls-bottom">
         <label for="cw-model">Model</label>
         <select id="cw-model" class="cw-model"></select>
-        <button type="button" class="cw-new">New</button>
+        <button type="button" class="cw-new" title="New conversation">🗨️</button>
       </div>
     `;
 
@@ -171,10 +171,11 @@
       addMessage("user", userText);
     }
 
-    // Loading bubble on the right
+    // Create assistant bubble (will be filled incrementally if streaming)
     const loading = document.createElement("div");
     loading.className = "cw-msg assistant";
     const loadingText = document.createElement("span");
+    loadingText.className = 'cw-text';
     loadingText.textContent = "Reading documents";
     const dots = document.createElement("span");
     dots.className = "cw-dots";
@@ -227,6 +228,7 @@
         model: selectedModel || config.model,
         temperature: config.temperature ?? 0.2,
         messages,
+        stream: true,
         referer: location.href,
         title: document.title,
       };
@@ -255,11 +257,49 @@
       }
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      const reply = data?.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn’t generate a response.";
+      const ct = (res.headers.get('content-type') || '').toLowerCase();
+      const textNode = loading.querySelector('.cw-text');
+
+      if (ct.includes('text/event-stream') && res.body && res.body.getReader) {
+        // Stream SSE tokens and append
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        clearInterval(dotsTimer);
+        dots.remove();
+        textNode.textContent = '';
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split('\n\n');
+          buffer = parts.pop();
+          for (const part of parts) {
+            const line = part.split('\n').find(l => l.startsWith('data: '));
+            if (!line) continue;
+            const data = line.slice(6).trim();
+            if (data === '[DONE]') continue;
+            try {
+              const json = JSON.parse(data);
+              const delta = json?.choices?.[0]?.delta?.content;
+              if (delta) textNode.textContent += delta;
+            } catch {}
+          }
+          scrollToBottom();
+        }
+        loading.classList.remove('loading');
+      } else {
+        // Fallback to JSON non-streaming mode
+        const data = await res.json();
+        const reply = data?.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn’t generate a response.";
+        clearInterval(dotsTimer);
+        loading.remove();
+        addMessage("assistant", reply);
+        return;
+      }
+      // Done streaming: if nothing came through, show an error
+      if (!textNode.textContent) textNode.textContent = "Sorry, I couldn’t generate a response.";
       clearInterval(dotsTimer);
-      loading.remove();
-      addMessage("assistant", reply);
       // clear edit target after successful response
       editTarget = null;
     } catch (err) {

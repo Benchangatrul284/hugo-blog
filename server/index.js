@@ -47,6 +47,7 @@ app.get('/healthz', (_req, res) => {
 app.post('/api/chat', async (req, res) => {
   try {
     const { messages, model, temperature, referer, title } = req.body || {};
+    const wantStream = Boolean(req.body && req.body.stream);
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'messages[] required' });
     }
@@ -65,9 +66,26 @@ app.post('/api/chat', async (req, res) => {
 
     const orRes = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',
-      headers,
-      body: JSON.stringify({ model: m, temperature: temp, messages }),
+      headers: wantStream ? { ...headers, 'Accept': 'text/event-stream' } : headers,
+      body: JSON.stringify({ model: m, temperature: temp, messages, stream: wantStream }),
     });
+
+    if (wantStream && orRes.ok && (orRes.headers.get('content-type') || '').includes('text/event-stream')) {
+      res.status(200);
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.flushHeaders && res.flushHeaders();
+      try {
+        for await (const chunk of orRes.body) {
+          res.write(chunk);
+        }
+      } catch (e) {
+        console.error('stream error', e?.message);
+      } finally {
+        res.end();
+      }
+      return;
+    }
 
     const text = await orRes.text();
     res.status(orRes.status);

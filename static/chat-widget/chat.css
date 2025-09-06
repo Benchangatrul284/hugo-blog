@@ -2,8 +2,8 @@
 .cw-toggle {
   position: fixed;
   bottom: var(--cw-bottom, 120px);
-  right: var(--cw-right, 28px);
-  left: var(--cw-left, auto);
+  right: var(--cw-right, auto);
+  left: var(--cw-left, 28px);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -17,8 +17,8 @@
 
 .cw-panel {
   position: fixed;
-  bottom: 110px;
-  right: 20px;
+  bottom: 200px;
+  left: 20px;
   width: 400px;
   max-height: 60vh;
   background: var(--theme);
