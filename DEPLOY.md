@@ -1,3 +1,26 @@
+# Quickstart (TL;DR)
+
+Production (Netlify)
+
+1) Set env var on Netlify: OPENROUTER_API_KEY = your key (Site settings → Build & deploy → Environment).
+2) Keep client config at static/chat-widget/config.json with "proxy_url": "/api/chat" and your default model (e.g., deepseek/deepseek-chat-v3.1:free).
+3) Push to GitHub; Netlify will build and deploy. The Edge Function streams /api/chat; the serverless function is a fallback.
+
+Local (streaming dev)
+
+1) cd server && npm install.
+2) Copy server/.env.example to server/.env and set OPENROUTER_API_KEY and CORS_ORIGIN=http://localhost:1313.
+3) npm start (proxy on http://localhost:8787).
+4) In static/chat-widget/config.json set "proxy_url": "http://localhost:8787/api/chat".
+5) In another shell: hugo server (site on http://localhost:1313).
+
+Tweak models/position
+
+- Edit static/chat-widget/config.json → model/models list (widget enforces ":free").
+- Move the toggle: set CSS vars (example bottom-left) html { --cw-left: 20px; --cw-right: auto; --cw-bottom: 20px; }.
+
+—
+
 # Deployment & Repo Overview
 
 This repo is a Hugo site with a page-scoped chat widget that answers questions using the current page content (RAG). It supports multi-turn chat, streaming, basic Markdown rendering, model selection (free-only), editing a prior user turn, and mobile-friendly placement.
@@ -145,4 +168,3 @@ Option B — Netlify CLI (non-streaming typical):
   - 401: Invalid or missing API key on the server side.
 - Payload too large/slow:
   - The page context is trimmed; you can further reduce `MAX_CHARS` in `chat.js` if needed.
-
