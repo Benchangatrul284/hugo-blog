@@ -104,14 +104,17 @@
   function addMessage(role, text, extraClass = "") {
     const el = document.createElement("div");
     el.className = `cw-msg ${role} ${extraClass}`.trim();
-    el.textContent = text;
+    const textSpan = document.createElement('span');
+    textSpan.className = 'cw-text';
+    textSpan.textContent = text;
+    el.appendChild(textSpan);
     if (role === 'user') {
       const editBtn = document.createElement('button');
       editBtn.type = 'button';
       editBtn.className = 'cw-edit';
       editBtn.textContent = 'Edit';
       editBtn.addEventListener('click', () => {
-        inputEl.value = text;
+        inputEl.value = textSpan.textContent || '';
         inputEl.focus();
         editTarget = el;
       });
@@ -137,15 +140,19 @@
     if (!userText) return;
     inputEl.value = "";
 
-    // If editing, remove the original user message and its immediate assistant reply
+    // If editing: update the selected user message text and clear all messages after it
     if (editTarget) {
-      const next = editTarget.nextElementSibling;
-      if (next && next.classList.contains('assistant')) next.remove();
-      editTarget.remove();
-      editTarget = null;
+      // update text
+      const t = editTarget.querySelector('.cw-text');
+      if (t) t.textContent = userText; else editTarget.textContent = userText;
+      // remove everything after the edited message
+      while (editTarget.nextElementSibling) {
+        editTarget.parentNode.removeChild(editTarget.nextElementSibling);
+      }
+    } else {
+      // Show new user message (right)
+      addMessage("user", userText);
     }
-    // Show user message (right)
-    addMessage("user", userText);
 
     // Loading bubble on the right
     const loading = document.createElement("div");
@@ -233,6 +240,8 @@
       clearInterval(dotsTimer);
       loading.remove();
       addMessage("assistant", reply);
+      // clear edit target after successful response
+      editTarget = null;
     } catch (err) {
       console.error(err);
       clearInterval(dotsTimer);

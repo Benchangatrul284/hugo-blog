@@ -119,10 +119,10 @@
   background: var(--entry, #f3f4f6);
 }
 
-/* User on right */
+/* User on right: same visual style as assistant */
 .cw-msg.user {
   margin-left: auto;
-  background: #e6f0ff;
+  background: var(--entry, #f3f4f6);
 }
 
 /* Reading documents... animation */
@@ -145,4 +145,5 @@
 /* Respect PaperMod dark theme */
 html.dark .cw-panel { background: var(--theme, #0b0f19); }
 html.dark .cw-msg.assistant { background: #0f172a; color: #e5e7eb; border: 1px solid #1f2937; }
-html.dark .cw-msg.user { background: #1f2937; color: #f9fafb; border: 1px solid #374151; }
+/* User uses same dark style as assistant for clarity */
+html.dark .cw-msg.user { background: #0f172a; color: #e5e7eb; border: 1px solid #1f2937; }
