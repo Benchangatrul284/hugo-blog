@@ -183,6 +183,9 @@
     }, 350);
 
     try {
+      const now = new Date();
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+      const nowStr = now.toLocaleString([], { hour12: false });
       const payload = {
         model: selectedModel || config.model,
         temperature: config.temperature ?? 0.2,
@@ -190,7 +193,7 @@
           {
             role: "system",
             content:
-              "You answer questions strictly using the provided page content. If the answer is not present, say you don’t have enough information from this page.",
+              `You answer questions strictly using the provided page content. If the answer is not present, say you don’t have enough information from this page. Current date/time: ${nowStr} ${tz}.`,
           },
           {
             role: "user",

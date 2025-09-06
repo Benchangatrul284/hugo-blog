@@ -144,5 +144,5 @@
 
 /* Respect PaperMod dark theme */
 html.dark .cw-panel { background: var(--theme, #0b0f19); }
-html.dark .cw-msg.assistant { background: #111827; color: #e5e7eb; }
-html.dark .cw-msg.user { background: #112240; color: #e5e7eb; }
+html.dark .cw-msg.assistant { background: #0f172a; color: #e5e7eb; border: 1px solid #1f2937; }
+html.dark .cw-msg.user { background: #1f2937; color: #f9fafb; border: 1px solid #374151; }
