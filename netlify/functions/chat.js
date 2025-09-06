@@ -11,6 +11,7 @@ const baseHeaders = {
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
+const REQUEST_TIMEOUT_MS = 20000;
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 204, headers: baseHeaders };
@@ -44,6 +45,10 @@ exports.handler = async (event) => {
       'X-Title': toAscii(title || ''),
     };
 
+    // Timeout wrapper using AbortController
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    console.log('[chat] calling OpenRouter', { model, temperature, len: JSON.stringify(messages).length });
     const resp = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
       method: 'POST',
       headers,
