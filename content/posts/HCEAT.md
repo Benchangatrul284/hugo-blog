@@ -187,11 +187,6 @@ summary: "紀錄博愛校區的好店和雷店"
 * 營業時間: 每天都有開，開到下午。
 * 心得: 正常的新竹早餐店，但因為更常去吃其他更便宜的，再加上離宿舍偏遠，所以不常吃，但台北德芳美就是新竹早餐的平均值。(食物和菜單上差很多)
 
-{{< rawhtml >}}
-<div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="/img/EAT/台北德芳美.jpg" style="max-width: 700px; height: auto;">
-</div>
-{{< /rawhtml >}}
 
 ### [麥味登](https://maps.app.goo.gl/sMjDDS1q4Rxv9dSy8) {#麥味登}
 * 推薦: ★★★★☆
