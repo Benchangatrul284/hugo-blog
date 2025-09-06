@@ -135,6 +135,23 @@
     return text;
   }
 
+  function getHistoryTurns() {
+    const nodes = Array.from(messagesEl.querySelectorAll('.cw-msg'));
+    const turns = [];
+    for (const el of nodes) {
+      // Skip loading placeholder
+      if (el.querySelector('.cw-dots')) continue;
+      const role = el.classList.contains('user') ? 'user' : 'assistant';
+      const textEl = el.querySelector('.cw-text');
+      const content = (textEl ? textEl.textContent : el.textContent || '').trim();
+      if (!content) continue;
+      turns.push({ role, content });
+    }
+    // keep recent turns to avoid overly long prompts
+    const MAX_TURNS = 8; // 4 exchanges
+    return turns.length > MAX_TURNS ? turns.slice(-MAX_TURNS) : turns;
+  }
+
   async function send() {
     const userText = (inputEl.value || "").trim();
     if (!userText) return;
@@ -193,20 +210,23 @@
       const now = new Date();
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
       const nowStr = now.toLocaleString([], { hour12: false });
+      const history = getHistoryTurns();
+      const messages = [
+        {
+          role: "system",
+          content:
+            `You answer questions strictly using the provided page content. If the answer is not present, say you don’t have enough information from this page. Current date/time: ${nowStr} ${tz}.`,
+        },
+        {
+          role: "system",
+          content: `Page content (for grounding):\n${pageContext}`,
+        },
+        ...history,
+      ];
       const payload = {
         model: selectedModel || config.model,
         temperature: config.temperature ?? 0.2,
-        messages: [
-          {
-            role: "system",
-            content:
-              `You answer questions strictly using the provided page content. If the answer is not present, say you don’t have enough information from this page. Current date/time: ${nowStr} ${tz}.`,
-          },
-          {
-            role: "user",
-            content: `Page content (for grounding):\n${pageContext}\n\nQuestion: ${userText}`,
-          },
-        ],
+        messages,
         referer: location.href,
         title: document.title,
       };
