@@ -45,7 +45,7 @@ params:
   hideSummary: false
   showtoc: false
   tocopen: false
-  services.googleAnalytics.id: "G-EPGB6VC8JG" # replace with your Google Analytics ID
+  
 
   assets:
     disableHLJS: true # to disable highlight.js
@@ -119,3 +119,6 @@ outputs: # 如果要search的話要有以下設定
     - HTML
     - RSS
     - JSON # necessary for search
+services:
+  googleAnalytics:
+    ID: "G-EPGB6VC8JG"
