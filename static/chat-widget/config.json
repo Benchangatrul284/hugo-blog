@@ -1,5 +1,5 @@
 {
   "proxy_url": "/api/chat",
-  "model": "openrouter/anthropic/claude-3.5-sonnet",
+  "model": "deepseek/deepseek-chat-v3.1:free",
   "temperature": 0.2
 }

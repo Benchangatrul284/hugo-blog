@@ -1,4 +1,23 @@
 import express from 'express';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Minimal .env loader (no external dependency)
+try {
+  const envPath = path.resolve(path.dirname(new URL(import.meta.url).pathname), '.env');
+  if (fs.existsSync(envPath)) {
+    const lines = fs.readFileSync(envPath, 'utf8').split('\n');
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
+      const eq = trimmed.indexOf('=');
+      if (eq === -1) continue;
+      const key = trimmed.slice(0, eq).trim();
+      const value = trimmed.slice(eq + 1).trim();
+      if (!(key in process.env)) process.env[key] = value;
+    }
+  }
+} catch {}
 
 const app = express();
 const PORT = process.env.PORT || 8787;
@@ -20,6 +39,10 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json({ limit: '1mb' }));
+
+app.get('/healthz', (_req, res) => {
+  res.json({ ok: true, hasKey: Boolean(OPENROUTER_API_KEY) });
+});
 
 app.post('/api/chat', async (req, res) => {
   try {
@@ -61,4 +84,3 @@ app.post('/api/chat', async (req, res) => {
 app.listen(PORT, () => {
   console.log(`[chat-proxy] listening on :${PORT}`);
 });
-
