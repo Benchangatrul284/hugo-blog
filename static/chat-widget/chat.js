@@ -12,6 +12,37 @@
   let selectedModel = "deepseek/deepseek-chat-v3.1:free";
   let editTarget = null;
 
+  function escapeHTML(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
+
+  function sanitizeUrl(url) {
+    try {
+      const u = new URL(url, location.origin);
+      const ok = ['http:', 'https:'].includes(u.protocol);
+      return ok ? u.href : '#';
+    } catch { return '#'; }
+  }
+
+  function renderMarkdown(src) {
+    let s = escapeHTML(src);
+    // Inline code: `code`
+    s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // Bold: **text**
+    s = s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    // Italic: *text* or _text_
+    s = s.replace(/(^|\W)\*([^*]+)\*(?=\W|$)/g, '$1<em>$2</em>');
+    s = s.replace(/(^|\W)_([^_]+)_(?=\W|$)/g, '$1<em>$2</em>');
+    // Links: [text](url)
+    s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (m, t, u) => `<a href="${sanitizeUrl(u)}" target="_blank" rel="noopener">${t}</a>`);
+    // Line breaks
+    s = s.replace(/\n/g, '<br/>');
+    return s;
+  }
+
   function fetchWithTimeout(resource, options = {}, timeout = REQUEST_TIMEOUT_MS) {
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
@@ -106,7 +137,8 @@
     el.className = `cw-msg ${role} ${extraClass}`.trim();
     const textSpan = document.createElement('span');
     textSpan.className = 'cw-text';
-    textSpan.textContent = text;
+    textSpan.innerHTML = renderMarkdown(text);
+    el.dataset.raw = text;
     el.appendChild(textSpan);
     if (role === 'user') {
       const editBtn = document.createElement('button');
@@ -114,7 +146,7 @@
       editBtn.className = 'cw-edit';
       editBtn.textContent = 'Edit';
       editBtn.addEventListener('click', () => {
-        inputEl.value = textSpan.textContent || '';
+        inputEl.value = el.dataset.raw || textSpan.textContent || '';
         inputEl.focus();
         editTarget = el;
       });
@@ -159,9 +191,10 @@
 
     // If editing: update the selected user message text and clear all messages after it
     if (editTarget) {
-      // update text
+      // update text with markdown rendering
       const t = editTarget.querySelector('.cw-text');
-      if (t) t.textContent = userText; else editTarget.textContent = userText;
+      if (t) t.innerHTML = renderMarkdown(userText); else editTarget.textContent = userText;
+      editTarget.dataset.raw = userText;
       // remove everything after the edited message
       while (editTarget.nextElementSibling) {
         editTarget.parentNode.removeChild(editTarget.nextElementSibling);
@@ -267,7 +300,8 @@
         let buffer = '';
         clearInterval(dotsTimer);
         dots.remove();
-        textNode.textContent = '';
+        textNode.innerHTML = '';
+        let accum = '';
         while (true) {
           const { value, done } = await reader.read();
           if (done) break;
@@ -282,7 +316,10 @@
             try {
               const json = JSON.parse(data);
               const delta = json?.choices?.[0]?.delta?.content;
-              if (delta) textNode.textContent += delta;
+              if (delta) {
+                accum += delta;
+                textNode.innerHTML = renderMarkdown(accum);
+              }
             } catch {}
           }
           scrollToBottom();
@@ -298,7 +335,7 @@
         return;
       }
       // Done streaming: if nothing came through, show an error
-      if (!textNode.textContent) textNode.textContent = "Sorry, I couldn’t generate a response.";
+      if (!textNode.textContent) textNode.innerHTML = renderMarkdown("Sorry, I couldn’t generate a response.");
       clearInterval(dotsTimer);
       // clear edit target after successful response
       editTarget = null;

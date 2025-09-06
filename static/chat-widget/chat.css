@@ -2,8 +2,8 @@
 .cw-toggle {
   position: fixed;
   bottom: var(--cw-bottom, 120px);
-  right: var(--cw-right, auto);
-  left: var(--cw-left, 28px);
+  right: var(--cw-right, 28px);
+  left: var(--cw-left, auto);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -17,8 +17,8 @@
 
 .cw-panel {
   position: fixed;
-  bottom: 200px;
-  left: 20px;
+  bottom: 110px;
+  right: 20px;
   width: 400px;
   max-height: 60vh;
   background: var(--theme);
@@ -36,14 +36,14 @@
 @media (max-width: 640px) {
   .cw-panel {
     bottom: 84px;
-    left: 12px;
-    right: 12px;
-    width: auto; /* stretch between left/right */
+    right: calc(12px + env(safe-area-inset-right, 0px));
+    left: auto;
+    width: min(92vw, 420px);
     max-height: 65vh;
   }
   .cw-toggle {
-    bottom: 16px;
-    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    right: calc(16px + env(safe-area-inset-right, 0px));
     width: 48px;
     height: 48px;
   }
