@@ -48,7 +48,7 @@ exports.handler = async (event) => {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        model: typeof model === 'string' && model.trim() ? model : 'openrouter/anthropic/claude-3.5-sonnet',
+        model: typeof model === 'string' && model.trim() ? model : 'deepseek/deepseek-chat-v3.1:free',
         temperature: typeof temperature === 'number' ? temperature : 0.2,
         messages,
       }),
