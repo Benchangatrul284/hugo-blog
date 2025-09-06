@@ -2,12 +2,14 @@
 // Note: Putting API keys in client-side code is insecure.
 // Prefer using a serverless proxy. This demo uses a static config.
 
+
 (function () {
   const CONFIG_URL = "/chat-widget/config.json";
   const REQUEST_TIMEOUT_MS = 25000; // 25s
 
   let config = null;
-  let panel, toggleBtn, messagesEl, inputEl, sendBtn;
+  let panel, toggleBtn, messagesEl, inputEl, sendBtn, modelSelect, newBtn;
+  let selectedModel = "deepseek/deepseek-chat-v3.1:free";
 
   function fetchWithTimeout(resource, options = {}, timeout = REQUEST_TIMEOUT_MS) {
     const controller = new AbortController();
@@ -36,7 +38,14 @@
     panel = document.createElement("div");
     panel.className = "cw-panel";
     panel.innerHTML = `
-      <div class="cw-header">Ask about this page</div>
+      <div class="cw-header">
+        <div class="cw-title">Ask about this page</div>
+        <div class="cw-controls">
+          <label for="cw-model">Model</label>
+          <select id="cw-model" class="cw-model"></select>
+          <button type="button" class="cw-new">New</button>
+        </div>
+      </div>
       <div class="cw-messages" aria-live="polite"></div>
       <div class="cw-input">
         <input type="text" placeholder="Type your question..." />
@@ -48,8 +57,10 @@
     document.body.appendChild(panel);
 
     messagesEl = panel.querySelector(".cw-messages");
-    inputEl = panel.querySelector("input");
-    sendBtn = panel.querySelector("button");
+    inputEl = panel.querySelector(".cw-input input");
+    sendBtn = panel.querySelector(".cw-input button");
+    modelSelect = panel.querySelector(".cw-model");
+    newBtn = panel.querySelector(".cw-new");
 
     toggleBtn.addEventListener("click", () => {
       const open = panel.style.display === "flex";
@@ -61,6 +72,28 @@
       if (e.key === "Enter") send();
     });
     sendBtn.addEventListener("click", send);
+
+    // Populate model selector from config or fallback
+    const models = Array.isArray(config?.models) && config.models.length
+      ? config.models
+      : [config?.model || selectedModel];
+    selectedModel = models[0] || selectedModel;
+    models.forEach((m) => {
+      const opt = document.createElement("option");
+      opt.value = m;
+      opt.textContent = m;
+      modelSelect.appendChild(opt);
+    });
+    modelSelect.value = selectedModel;
+    modelSelect.addEventListener("change", () => {
+      selectedModel = modelSelect.value;
+    });
+
+    // New conversation
+    newBtn.addEventListener("click", () => {
+      messagesEl.innerHTML = "";
+      addMessage("assistant", "New conversation started.");
+    });
   }
 
   function scrollToBottom() {
@@ -115,6 +148,14 @@
 
     const pageContext = getPageContext();
 
+    // Free-model check
+    if (!String(selectedModel || "").endsWith(":free")) {
+      clearInterval(dotsTimer);
+      loading.remove();
+      addMessage("assistant", "Sorry model not supported");
+      return;
+    }
+
     // Simple JS-based ellipsis animation for broad browser support
     let i = 0;
     const frames = ["", ".", "..", "..."];
@@ -125,7 +166,7 @@
 
     try {
       const payload = {
-        model: config.model,
+        model: selectedModel || config.model,
         temperature: config.temperature ?? 0.2,
         messages: [
           {

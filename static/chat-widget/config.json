@@ -1,5 +1,9 @@
 {
   "proxy_url": "/api/chat",
   "model": "deepseek/deepseek-chat-v3.1:free",
+  "models": [
+    "deepseek/deepseek-chat-v3.1:free",
+    "openai/gpt-oss-20b:free"
+  ],
   "temperature": 0.2
 }
