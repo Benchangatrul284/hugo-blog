@@ -8,9 +8,12 @@
   const REQUEST_TIMEOUT_MS = 25000; // 25s
 
   let config = null;
-  let panel, toggleBtn, messagesEl, inputEl, sendBtn, modelSelect, newBtn;
+  let panel, toggleBtn, messagesEl, inputEl, actionBtn, modelSelect, newBtn;
   let selectedModel = "deepseek/deepseek-chat-v3.1:free";
   let editTarget = null;
+  let currentAbort = null;
+  let userAborted = false;
+  let isStreaming = false;
 
   function escapeHTML(s) {
     return String(s)
@@ -50,6 +53,32 @@
     return fetch(resource, opts).finally(() => clearTimeout(id));
   }
 
+  function humanizeHttpError(status, bodyText) {
+    let hint = '';
+    if (status === 401 || status === 403) hint = 'Invalid or missing API key on the proxy.';
+    else if (status === 404) hint = 'Proxy URL not found. Is the server route correct?';
+    else if (status >= 500) hint = 'Proxy or upstream error. Check server logs.';
+    let detail = '';
+    try {
+      const j = JSON.parse(bodyText || '{}');
+      if (typeof j === 'string') detail = j;
+      else if (j.error) {
+        if (typeof j.error === 'string') detail = j.error;
+        else if (typeof j.error?.message === 'string') detail = j.error.message;
+        else detail = JSON.stringify(j.error).slice(0, 300);
+      } else if (j.message) {
+        detail = String(j.message);
+      } else if (Array.isArray(j.errors) && j.errors.length) {
+        detail = String(j.errors[0]?.message || j.errors[0]);
+      } else {
+        detail = JSON.stringify(j).slice(0, 300);
+      }
+    } catch { detail = (bodyText || '').slice(0, 300); }
+    const tail = detail ? `\nDetail: ${escapeHTML(detail)}` : '';
+    const h = hint ? `\nHint: ${hint}` : '';
+    return `Request failed (HTTP ${status}).${h}${tail}`;
+  }
+
   async function loadConfig() {
     try {
       const res = await fetch(CONFIG_URL, { cache: "no-cache" });
@@ -65,7 +94,8 @@
     toggleBtn = document.createElement("button");
     toggleBtn.className = "cw-toggle";
     toggleBtn.title = "Chat about this page";
-    toggleBtn.innerHTML = "💬";
+    // Use custom PNG icon inside the gray circle
+    toggleBtn.innerHTML = `<img src="${location.origin ? new URL('/img/chat-bubble.png', location.origin).pathname : '/img/chat-bubble.png'}" alt="Open chat" aria-hidden="true" />`;
 
     panel = document.createElement("div");
     panel.className = "cw-panel";
@@ -76,12 +106,14 @@
       <div class="cw-messages" aria-live="polite"></div>
       <div class="cw-input">
         <input type="text" placeholder="Type your question..." />
-        <button type="button" title="Send">🚀</button>
+        <div class="cw-actions">
+          <button type="button" class="cw-btn cw-action" title="Send" aria-label="Send"><svg class="icon-up" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M12 5l-6 6M12 5l6 6"/></svg><span class="icon-stop"></span></button>
+          <button type="button" class="cw-btn cw-new" title="New conversation" aria-label="New conversation">＋</button>
+        </div>
       </div>
       <div class="cw-controls-bottom">
         <label for="cw-model">Model</label>
         <select id="cw-model" class="cw-model"></select>
-        <button type="button" class="cw-new" title="New conversation">🗨️</button>
       </div>
     `;
 
@@ -90,9 +122,9 @@
 
     messagesEl = panel.querySelector(".cw-messages");
     inputEl = panel.querySelector(".cw-input input");
-    sendBtn = panel.querySelector(".cw-input button");
+    actionBtn = panel.querySelector(".cw-action");
     modelSelect = panel.querySelector(".cw-model");
-    newBtn = panel.querySelector(".cw-new");
+    newBtn = panel.querySelector(".cw-actions .cw-new");
 
     const placeWidget = () => {
       const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -131,9 +163,17 @@
     window.addEventListener('resize', placeWidget);
 
     inputEl.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") send();
+      if (e.key === "Enter" && !isStreaming) send();
     });
-    sendBtn.addEventListener("click", send);
+    if (actionBtn) {
+      actionBtn.addEventListener("click", () => {
+        if (isStreaming) {
+          if (currentAbort) { userAborted = true; try { currentAbort.abort(); } catch {} }
+        } else {
+          send();
+        }
+      });
+    }
 
     // Populate model selector from config or fallback (hide :free in labels)
     const models = Array.isArray(config?.models) && config.models.length
@@ -201,8 +241,10 @@
     const nodes = Array.from(messagesEl.querySelectorAll('.cw-msg'));
     const turns = [];
     for (const el of nodes) {
-      // Skip loading placeholder
-      if (el.querySelector('.cw-dots')) continue;
+      // Skip loading placeholders (new + legacy)
+      if (el.classList.contains('loading')) continue;
+      if (el.querySelector('.cw-dots')) continue; // legacy indicator
+      if (el.querySelector('.cw-pulse') || el.querySelector('.cw-pulse-text')) continue; // current shimmer
       const role = el.classList.contains('user') ? 'user' : 'assistant';
       const textEl = el.querySelector('.cw-text');
       const content = (textEl ? textEl.textContent : el.textContent || '').trim();
@@ -215,6 +257,7 @@
   }
 
   async function send() {
+    if (isStreaming) return; // avoid overlapping streams
     const userText = (inputEl.value || "").trim();
     if (!userText) return;
     inputEl.value = "";
@@ -236,14 +279,12 @@
 
     // Create assistant bubble (will be filled incrementally if streaming)
     const loading = document.createElement("div");
-    loading.className = "cw-msg assistant";
+    loading.className = "cw-msg assistant loading";
     const loadingText = document.createElement("span");
-    loadingText.className = 'cw-text';
-    loadingText.textContent = "Reading documents";
-    const dots = document.createElement("span");
-    dots.className = "cw-dots";
+    loadingText.className = 'cw-text cw-pulse-text';
+    // Whole label shimmers left-to-right
+    loadingText.textContent = "Reading Documents...";
     loading.appendChild(loadingText);
-    loading.appendChild(dots);
     messagesEl.appendChild(loading);
     scrollToBottom();
 
@@ -262,14 +303,25 @@
       return;
     }
 
-    // Simple JS-based ellipsis animation for broad browser support
-    let i = 0;
-    const frames = ["", ".", "..", "..."];
-    const dotsTimer = setInterval(() => {
-      dots.textContent = frames[i % frames.length];
-      i++;
-    }, 350);
+    const stopPulse = () => { try { loadingText.classList.remove('cw-pulse-text'); } catch {} };
+    const updateActionButtonUI = () => {
+      if (!actionBtn) return;
+      if (isStreaming) {
+        actionBtn.classList.add('is-pause');
+        actionBtn.title = 'Pause';
+        actionBtn.setAttribute('aria-label', 'Pause');
+      } else {
+        actionBtn.classList.remove('is-pause');
+        actionBtn.title = 'Send';
+        actionBtn.setAttribute('aria-label', 'Send');
+      }
+    };
+    const setBusy = (b) => {
+      isStreaming = b;
+      updateActionButtonUI();
+    };
 
+    userAborted = false;
     try {
       const now = new Date();
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
@@ -296,30 +348,44 @@
         title: document.title,
       };
 
+      setBusy(true);
       let res;
-      if (config.proxy_url) {
-        res = await fetchWithTimeout(config.proxy_url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
+      const hn = location.hostname || '';
+      const isLocalHost = ['localhost', '127.0.0.1', '::1'].includes(hn) ||
+        /^(10\.|192\.168\.|172\.(1[6-9]|2\d|3[0-1])\.)/.test(hn) ||
+        /\.local$/.test(hn);
+      const apiUrl = (isLocalHost && config.dev_proxy_url) ? config.dev_proxy_url : config.proxy_url;
+      const ac = new AbortController();
+      currentAbort = ac;
+      const timerId = setTimeout(() => { try { ac.abort(); } catch {} }, REQUEST_TIMEOUT_MS);
+      const fetchOpts = (headers) => ({ method: 'POST', headers, body: JSON.stringify(payload), signal: ac.signal });
+      if (apiUrl) {
+        res = await fetch(apiUrl, fetchOpts({ 'Content-Type': 'application/json' }));
       } else if (config.openrouter_api_key) {
-        // Fallback: direct call (not recommended for production)
-        res = await fetchWithTimeout(`${config.api_base || "https://openrouter.ai/api/v1"}/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${config.openrouter_api_key}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": location.href,
-            "X-Title": document.title,
-          },
-          body: JSON.stringify(payload),
-        });
+        res = await fetch(`${config.api_base || 'https://openrouter.ai/api/v1'}/chat/completions`, fetchOpts({
+          'Authorization': `Bearer ${config.openrouter_api_key}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': location.href,
+          'X-Title': document.title,
+        }));
       } else {
-        throw new Error("No proxy_url or API key provided in config");
+        clearTimeout(timerId);
+        currentAbort = null;
+        setBusy(false);
+        throw new Error('No proxy_url or API key provided in config');
       }
 
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok) {
+        const bodyText = await res.text().catch(() => '');
+        const msg = humanizeHttpError(res.status, bodyText);
+        stopPulse();
+        loading.remove();
+        addMessage('assistant', msg);
+        clearTimeout(timerId);
+        currentAbort = null;
+        setBusy(false);
+        return;
+      }
       const ct = (res.headers.get('content-type') || '').toLowerCase();
       const textNode = loading.querySelector('.cw-text');
 
@@ -328,8 +394,7 @@
         const reader = res.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
-        clearInterval(dotsTimer);
-        dots.remove();
+        stopPulse();
         textNode.innerHTML = '';
         let accum = '';
         while (true) {
@@ -359,21 +424,44 @@
         // Fallback to JSON non-streaming mode
         const data = await res.json();
         const reply = data?.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn’t generate a response.";
-        clearInterval(dotsTimer);
+        stopPulse();
         loading.remove();
         addMessage("assistant", reply);
+        clearTimeout(timerId);
+        currentAbort = null;
+        setBusy(false);
         return;
       }
       // Done streaming: if nothing came through, show an error
       if (!textNode.textContent) textNode.innerHTML = renderMarkdown("Sorry, I couldn’t generate a response.");
-      clearInterval(dotsTimer);
+      stopPulse();
       // clear edit target after successful response
       editTarget = null;
+      clearTimeout(timerId);
+      currentAbort = null;
+      setBusy(false);
     } catch (err) {
       console.error(err);
-      clearInterval(dotsTimer);
-      loading.remove();
-      addMessage("assistant", "Sorry, We are having a problem");
+      stopPulse();
+      const isAbort = err?.name === 'AbortError' || /aborted|timeout/i.test(String(err?.message || ''));
+      if (isAbort && userAborted) {
+        // Keep what we already rendered, mark paused
+        loading.classList.remove('loading');
+        const tn = loading.querySelector('.cw-text');
+        if (tn && tn.textContent) tn.innerHTML = tn.innerHTML + renderMarkdown("\n\n(已暫停)");
+      } else if (isAbort) {
+        loading.remove();
+        addMessage('assistant', 'Connection timed out. Is your proxy running and reachable?');
+      } else if (err instanceof TypeError) {
+        loading.remove();
+        addMessage('assistant', 'Network error reaching the proxy. Check dev_proxy_url and CORS.');
+      } else {
+        loading.remove();
+        addMessage('assistant', `Unexpected error: ${escapeHTML(err?.message || 'Unknown error')}`);
+      }
+      currentAbort = null;
+      setBusy(false);
+      try { if (typeof timerId !== 'undefined') clearTimeout(timerId); } catch {}
     }
   }
 

@@ -69,6 +69,11 @@ app.post('/api/chat', async (req, res) => {
       headers: wantStream ? { ...headers, 'Accept': 'text/event-stream' } : headers,
       body: JSON.stringify({ model: m, temperature: temp, messages, stream: wantStream }),
     });
+    if (!orRes.ok) {
+      const clone = orRes.clone();
+      const txt = await clone.text().catch(() => '');
+      console.error(`[proxy] upstream ${orRes.status} ${orRes.statusText} body:`, txt.slice(0, 400));
+    }
 
     if (wantStream && orRes.ok && (orRes.headers.get('content-type') || '').includes('text/event-stream')) {
       res.status(200);

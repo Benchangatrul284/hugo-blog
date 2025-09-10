@@ -1,9 +1,11 @@
 {
   "proxy_url": "/api/chat",
+  "dev_proxy_url": "http://localhost:8787/api/chat",
   "model": "deepseek/deepseek-chat-v3.1:free",
   "models": [
     "deepseek/deepseek-chat-v3.1:free",
-    "openai/gpt-oss-20b:free"
+    "google/gemini-2.0-flash-exp:free",
+    "nvidia/llama-3.1-nemotron-ultra-253b-v1:free"
   ],
   "temperature": 0.2
 }
