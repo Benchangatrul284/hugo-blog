@@ -5,10 +5,10 @@
 
 (function () {
   const CONFIG_URL = "/chat-widget/config.json";
-  const REQUEST_TIMEOUT_MS = 25000; // 25s
+  const REQUEST_TIMEOUT_MS = 60000; // 60s to reduce mid-stream timeouts
 
   let config = null;
-  let panel, toggleBtn, messagesEl, inputEl, actionBtn, modelSelect, newBtn;
+  let panel, toggleBtn, messagesEl, inputEl, actionBtn, modelSelect, newBtn, closeBtn;
   let selectedModel = "deepseek/deepseek-chat-v3.1:free";
   let editTarget = null;
   let currentAbort = null;
@@ -31,7 +31,18 @@
   }
 
   function renderMarkdown(src) {
-    let s = escapeHTML(src);
+    // Normalize common upstream typos/noise before rendering
+    const normalizeAssistantText = (t) => {
+      if (!t) return t;
+      let s = String(t);
+      // Fix common misspellings of "time exceeded"
+      s = s.replace(/time\s*exced+ed/gi, 'Time exceeded');
+      s = s.replace(/time\s*exced+e?d/gi, 'Time exceeded');
+      s = s.replace(/time\s*ex(e|ee|e|)ded/gi, 'Time exceeded');
+      return s;
+    };
+
+    let s = escapeHTML(normalizeAssistantText(src));
     // Inline code: `code`
     s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
     // Bold: **text**
@@ -102,13 +113,14 @@
     panel.innerHTML = `
       <div class="cw-header">
         <div class="cw-title">Ask about this page</div>
+        <button type="button" class="cw-close" title="Close" aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3L13 13M13 3L3 13"/></svg></button>
       </div>
       <div class="cw-messages" aria-live="polite"></div>
       <div class="cw-input">
+        <button type="button" class="cw-btn cw-new" title="New conversation" aria-label="New conversation">＋</button>
         <input type="text" placeholder="Type your question..." />
         <div class="cw-actions">
           <button type="button" class="cw-btn cw-action" title="Send" aria-label="Send"><svg class="icon-up" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M12 5l-6 6M12 5l6 6"/></svg><span class="icon-stop"></span></button>
-          <button type="button" class="cw-btn cw-new" title="New conversation" aria-label="New conversation">＋</button>
         </div>
       </div>
       <div class="cw-controls-bottom">
@@ -124,7 +136,8 @@
     inputEl = panel.querySelector(".cw-input input");
     actionBtn = panel.querySelector(".cw-action");
     modelSelect = panel.querySelector(".cw-model");
-    newBtn = panel.querySelector(".cw-actions .cw-new");
+    newBtn = panel.querySelector(".cw-new");
+    closeBtn = panel.querySelector('.cw-close');
 
     const placeWidget = () => {
       const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -160,6 +173,11 @@
       }
       if (!open) inputEl.focus();
     });
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => {
+        panel.style.display = 'none';
+      });
+    }
     window.addEventListener('resize', placeWidget);
 
     inputEl.addEventListener("keydown", (e) => {
@@ -190,6 +208,8 @@
     modelSelect.addEventListener("change", () => {
       selectedModel = modelSelect.value;
     });
+
+    // No extra indicator next to the model label
 
     // New conversation
     newBtn.addEventListener("click", () => {
@@ -412,7 +432,9 @@
               const json = JSON.parse(data);
               const delta = json?.choices?.[0]?.delta?.content;
               if (delta) {
-                accum += delta;
+                // Sanitize mid-stream bad tokens like "time excedded"
+                const cleaned = String(delta).replace(/time\s*exced+ed/gi, 'Time exceeded');
+                accum += cleaned;
                 textNode.innerHTML = renderMarkdown(accum);
               }
             } catch {}
@@ -423,7 +445,8 @@
       } else {
         // Fallback to JSON non-streaming mode
         const data = await res.json();
-        const reply = data?.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn’t generate a response.";
+        let reply = data?.choices?.[0]?.message?.content?.trim() || "Sorry, I couldn’t generate a response.";
+        reply = reply.replace(/time\s*exced+ed/gi, 'Time exceeded');
         stopPulse();
         loading.remove();
         addMessage("assistant", reply);
@@ -451,7 +474,7 @@
         if (tn && tn.textContent) tn.innerHTML = tn.innerHTML + renderMarkdown("\n\n(已暫停)");
       } else if (isAbort) {
         loading.remove();
-        addMessage('assistant', 'Connection timed out. Is your proxy running and reachable?');
+        addMessage('assistant', 'Response timed out. Please try again.');
       } else if (err instanceof TypeError) {
         loading.remove();
         addMessage('assistant', 'Network error reaching the proxy. Check dev_proxy_url and CORS.');
