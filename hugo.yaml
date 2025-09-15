@@ -1,7 +1,13 @@
-baseURL: ""
-languageCode: en-us
+baseURL: "https://benchang.netlify.app/"
+languageCode: zh-tw
 title: Benchang's Blog
 theme: PaperMod
+enableRobotsTXT: true
+enableGitInfo: true
+sitemap:
+  changefreq: daily
+  priority: 0.5
+  filename: sitemap.xml
 markup:
   goldmark:
     extensions:
@@ -23,6 +29,7 @@ markup:
     guessSyntax: true
     lineNos: true
 params:
+  env: production
   math: true
   description: "A blog about everything and nothing."
   keywords: [Blog, Portfolio, PaperMod]
@@ -100,6 +107,9 @@ params:
     minMatchCharLength: 0
     limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
     keys: ["title", "permalink", "summary", "content"]
+  analytics:
+    google:
+      SiteVerificationTag: "OpnvA5soGY8g7ZukGC6nicxmoCjIju2totmZpnsAtu8"
 menu: # 設定右上角頁面選項
   main:
     - identifier: categories
