@@ -2,21 +2,21 @@
 
 Production (Netlify)
 
-1) Set env var on Netlify: OPENROUTER_API_KEY = your key (Site settings → Build & deploy → Environment).
-2) Keep client config at static/chat-widget/config.json with "proxy_url": "/api/chat" and your default model (e.g., deepseek/deepseek-chat-v3.1:free).
+1) Set env var on Netlify: GOOGLE_API_KEY = your Gemini key (Site settings → Build & deploy → Environment).
+2) Keep client config at static/chat-widget/config.json with "proxy_url": "/api/chat" and your default model (e.g., gemini-2.0-flash).
 3) Push to GitHub; Netlify will build and deploy. The Edge Function streams /api/chat; the serverless function is a fallback.
 
 Local (streaming dev)
 
 1) cd server && npm install.
-2) Copy server/.env.example to server/.env and set OPENROUTER_API_KEY and CORS_ORIGIN=http://localhost:1313.
+2) Copy server/.env.example to server/.env and set GOOGLE_API_KEY and CORS_ORIGIN=http://localhost:1313.
 3) npm start (proxy on http://localhost:8787).
 4) In static/chat-widget/config.json set "proxy_url": "http://localhost:8787/api/chat".
 5) In another shell: hugo server (site on http://localhost:1313).
 
 Tweak models/position
 
-- Edit static/chat-widget/config.json → model/models list (widget enforces ":free").
+- Edit static/chat-widget/config.json → model/models list (must be valid Gemini slugs).
 - Move the toggle: set CSS vars (example bottom-left) html { --cw-left: 20px; --cw-right: auto; --cw-bottom: 20px; }.
 
 —
@@ -60,8 +60,8 @@ This repo is a Hugo site with a page-scoped chat widget that answers questions u
 ## Configuration (static/chat-widget/config.json)
 
 - `proxy_url`: API endpoint to call. In production keep `"/api/chat"` so Netlify routes to the function/edge.
-- `model`: Default model (must end with `:free` to be accepted by the widget).
-- `models`: Array of selectable models (labels hide `:free`).
+- `model`: Default Gemini model slug.
+- `models`: Array of selectable models.
 - `temperature`: Optional sampling setting.
 
 Example:
@@ -69,10 +69,10 @@ Example:
 ```
 {
   "proxy_url": "/api/chat",
-  "model": "deepseek/deepseek-chat-v3.1:free",
+  "model": "gemini-2.0-flash",
   "models": [
-    "deepseek/deepseek-chat-v3.1:free",
-    "openai/gpt-oss-20b:free"
+    "gemini-2.0-flash",
+    "gemini-1.5-pro"
   ],
   "temperature": 0.2
 }
@@ -101,8 +101,8 @@ html { --cw-left: 20px; --cw-right: auto; --cw-bottom: 20px; }
 
 Environment variables (Netlify Site Settings → Build & deploy → Environment):
 
-- `OPENROUTER_API_KEY` — Required. Server-side key used by Edge/Functions.
-- `OPENROUTER_API_BASE` — Optional. Defaults to `https://openrouter.ai/api/v1`.
+- `GOOGLE_API_KEY` — Required. Gemini Generative Language API key used by Edge/Functions. (Legacy `OPENROUTER_API_KEY` is still read as a fallback.)
+- `GOOGLE_API_BASE` — Optional. Defaults to `https://generativelanguage.googleapis.com/v1beta/openai` (legacy `OPENROUTER_API_BASE` is also accepted).
 - Node version is pinned to 20 via `netlify.toml` for `fetch` support.
 
 Logs and Troubleshooting:
@@ -116,7 +116,7 @@ Option A — Local Node Proxy (recommended for streaming):
 
 1) `cd server && npm install`
 2) Create `server/.env` from `.env.example`; set:
-   - `OPENROUTER_API_KEY=sk-or-...`
+   - `GOOGLE_API_KEY=AIza...`
    - `CORS_ORIGIN=http://localhost:1313`
 3) Start proxy: `npm start` (listens on `http://localhost:8787`).
 4) In `static/chat-widget/config.json`, set:
@@ -133,7 +133,7 @@ Option B — Netlify CLI (non-streaming typical):
 ## Security Notes
 
 - Do not put API keys in client assets. The widget uses a server-side proxy (Edge/Functions or local Node).
-- If a key was ever exposed, rotate it in OpenRouter.
+- If a key was ever exposed, rotate it in the Google AI Studio / Cloud console.
 
 ## Mobile Behavior & Positioning
 
@@ -153,7 +153,7 @@ Option B — Netlify CLI (non-streaming typical):
 ## Streaming Details
 
 - Client requests `stream: true`.
-- Node proxy (`server/index.js`) streams SSE from OpenRouter to the browser.
+- Node proxy (`server/index.js`) streams SSE from Gemini to the browser.
 - Netlify Edge Function streams when available; the serverless function returns buffered JSON as a fallback.
 - The widget displays tokens incrementally; on non-streaming, it shows the final message when complete.
 
@@ -161,8 +161,8 @@ Option B — Netlify CLI (non-streaming typical):
 
 - “Reading documents…” stuck:
   - Confirm `/api/chat` returns 200 (check browser Network tab).
-  - Verify `OPENROUTER_API_KEY` is set on Netlify and a deploy occurred after setting it.
-  - Ensure model slug is valid (and ends with `:free` in the widget UI).
+  - Verify `GOOGLE_API_KEY` is set on Netlify (or legacy `OPENROUTER_API_KEY`) and a deploy occurred after setting it.
+  - Ensure the model slug is valid for the Gemini API in both the widget UI and proxy request.
 - 404/401 errors:
   - 404: `/api/chat` not routed; verify `netlify.toml` and deploy logs.
   - 401: Invalid or missing API key on the server side.

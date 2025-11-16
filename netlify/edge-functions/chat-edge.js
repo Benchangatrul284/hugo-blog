@@ -1,5 +1,5 @@
 // Netlify Edge Function: /api/chat (streaming)
-// Proxies OpenRouter with server-side API key and streams SSE to the client
+// Proxies Google Gemini with a server-side API key and streams SSE to the client
 
 export default async (request, context) => {
   try {
@@ -13,8 +13,16 @@ export default async (request, context) => {
     }
 
     const toAscii = (v) => String(v || '').replace(/[^\x00-\x7F]/g, '');
-    const GOOGLE_BASE = (globalThis.Netlify?.env?.get?.('OPENROUTER_API_BASE')) || ' https://generativelanguage.googleapis.com/v1beta/openai/';
-    const API_KEY = (globalThis.Netlify?.env?.get?.('GOOGLE_API_KEY')) || (globalThis.Deno?.env?.get?.('GOOGLE_API_KEY')) || '';
+    const GOOGLE_BASE =
+      (globalThis.Netlify?.env?.get?.('GOOGLE_API_BASE')) ||
+      (globalThis.Netlify?.env?.get?.('OPENROUTER_API_BASE')) ||
+      'https://generativelanguage.googleapis.com/v1beta/openai';
+    const API_KEY =
+      (globalThis.Netlify?.env?.get?.('GOOGLE_API_KEY')) ||
+      (globalThis.Netlify?.env?.get?.('OPENROUTER_API_KEY')) ||
+      (globalThis.Deno?.env?.get?.('GOOGLE_API_KEY')) ||
+      (globalThis.Deno?.env?.get?.('OPENROUTER_API_KEY')) ||
+      '';
     if (!API_KEY) {
       return new Response(JSON.stringify({ error: 'missing_api_key' }), {
         status: 500,
@@ -34,7 +42,7 @@ export default async (request, context) => {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        model: typeof model === 'string' && model.trim() ? model : 'deepseek/deepseek-chat-v3.1:free',
+        model: typeof model === 'string' && model.trim() ? model : 'gemini-2.0-flash',
         temperature: typeof temperature === 'number' ? temperature : 0.2,
         messages,
         stream: true,
@@ -68,4 +76,3 @@ export default async (request, context) => {
     });
   }
 };
-

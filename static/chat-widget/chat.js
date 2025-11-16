@@ -1,4 +1,4 @@
-// Chat Widget: page-scoped RAG using OpenRouter
+// Chat Widget: page-scoped RAG using the Gemini (Google Generative Language) API
 // Note: Putting API keys in client-side code is insecure.
 // Prefer using a serverless proxy. This demo uses a static config.
 
@@ -9,7 +9,7 @@
 
   let config = null;
   let panel, toggleBtn, messagesEl, inputEl, actionBtn, modelSelect, newBtn, closeBtn;
-  let selectedModel = "deepseek/deepseek-chat-v3.1:free";
+  let selectedModel = "gemini-2.0-flash";
   let editTarget = null;
   let currentAbort = null;
   let userAborted = false;
@@ -193,7 +193,7 @@
       });
     }
 
-    // Populate model selector from config or fallback (hide :free in labels)
+    // Populate model selector from config or fallback
     const models = Array.isArray(config?.models) && config.models.length
       ? config.models
       : [config?.model || selectedModel];
@@ -201,7 +201,7 @@
     models.forEach((m) => {
       const opt = document.createElement("option");
       opt.value = m;
-      opt.textContent = String(m).replace(/:free$/, "");
+      opt.textContent = String(m);
       modelSelect.appendChild(opt);
     });
     modelSelect.value = selectedModel;
@@ -316,13 +316,6 @@
     }
 
     const pageContext = getPageContext();
-    // Free-model check before starting animation
-    if (!String(selectedModel || "").endsWith(":free")) {
-      loading.remove();
-      addMessage("assistant", "Sorry model not supported");
-      return;
-    }
-
     const stopPulse = () => { try { loadingText.classList.remove('cw-pulse-text'); } catch {} };
     const updateActionButtonUI = () => {
       if (!actionBtn) return;

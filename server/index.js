@@ -21,12 +21,12 @@ try {
 
 const app = express();
 const PORT = process.env.PORT || 8787;
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
-const OPENROUTER_BASE = process.env.OPENROUTER_API_BASE || 'https://openrouter.ai/api/v1';
+const GEMINI_API_KEY = process.env.GOOGLE_API_KEY || process.env.OPENROUTER_API_KEY || '';
+const GEMINI_BASE = process.env.GOOGLE_API_BASE || process.env.OPENROUTER_API_BASE || 'https://generativelanguage.googleapis.com/v1beta/openai';
 const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
 
-if (!OPENROUTER_API_KEY) {
-  console.warn('[warn] OPENROUTER_API_KEY is not set. Requests will fail until it is configured.');
+if (!GEMINI_API_KEY) {
+  console.warn('[warn] GOOGLE_API_KEY is not set. Requests will fail until it is configured.');
 }
 
 // Basic CORS (no external dep)
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 app.use(express.json({ limit: '1mb' }));
 
 app.get('/healthz', (_req, res) => {
-  res.json({ ok: true, hasKey: Boolean(OPENROUTER_API_KEY) });
+  res.json({ ok: true, hasKey: Boolean(GEMINI_API_KEY) });
 });
 
 app.post('/api/chat', async (req, res) => {
@@ -51,20 +51,20 @@ app.post('/api/chat', async (req, res) => {
     if (!Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'messages[] required' });
     }
-    const m = typeof model === 'string' && model.trim() ? model : 'openrouter/anthropic/claude-3.5-sonnet';
+    const m = typeof model === 'string' && model.trim() ? model : 'gemini-2.0-flash';
     const temp = typeof temperature === 'number' ? temperature : 0.2;
 
     // Ensure header values are ASCII to satisfy undici ByteString requirement
     const toAscii = (v) => String(v || '').replace(/[^\x00-\x7F]/g, '');
     const headers = {
-      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+      'Authorization': `Bearer ${GEMINI_API_KEY}`,
       'Content-Type': 'application/json',
-      // OpenRouter recommends these headers for attribution
+      // Pass through attribution/context headers for upstream logging
       'HTTP-Referer': toAscii(referer || req.headers['referer'] || ''),
       'X-Title': toAscii(title || ''),
     };
 
-    const orRes = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
+    const orRes = await fetch(`${GEMINI_BASE}/chat/completions`, {
       method: 'POST',
       headers: wantStream ? { ...headers, 'Accept': 'text/event-stream' } : headers,
       body: JSON.stringify({ model: m, temperature: temp, messages, stream: wantStream }),
@@ -94,7 +94,7 @@ app.post('/api/chat', async (req, res) => {
 
     const text = await orRes.text();
     res.status(orRes.status);
-    // Proxy through the JSON/text from OpenRouter unchanged
+    // Proxy through the JSON/text from the upstream API unchanged
     try {
       res.type('application/json').send(JSON.parse(text));
     } catch {

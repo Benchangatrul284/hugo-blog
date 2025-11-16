@@ -1,8 +1,8 @@
 // Netlify Function: /api/chat
-// Proxies chat requests to OpenRouter using a server-side API key
+// Proxies chat requests to the Gemini (Google Generative Language) API using a server-side key
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
-const OPENROUTER_BASE = process.env.OPENROUTER_API_BASE || 'https://openrouter.ai/api/v1';
+const GEMINI_API_KEY = process.env.GOOGLE_API_KEY || process.env.OPENROUTER_API_KEY || '';
+const GEMINI_BASE = process.env.GOOGLE_API_BASE || process.env.OPENROUTER_API_BASE || 'https://generativelanguage.googleapis.com/v1beta/openai';
 const ALLOW_ORIGIN = process.env.CORS_ORIGIN || '*';
 
 const baseHeaders = {
@@ -20,11 +20,11 @@ exports.handler = async (event) => {
     return { statusCode: 405, headers: baseHeaders, body: 'Method Not Allowed' };
   }
 
-  if (!OPENROUTER_API_KEY) {
+  if (!GEMINI_API_KEY) {
     return {
       statusCode: 500,
       headers: baseHeaders,
-      body: JSON.stringify({ error: 'missing_api_key', message: 'OPENROUTER_API_KEY is not configured' }),
+      body: JSON.stringify({ error: 'missing_api_key', message: 'GOOGLE_API_KEY is not configured' }),
     };
   }
 
@@ -39,7 +39,7 @@ exports.handler = async (event) => {
     const toAscii = (v) => String(v || '').replace(/[^\x00-\x7F]/g, '');
 
     const headers = {
-      'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+      'Authorization': `Bearer ${GEMINI_API_KEY}`,
       'Content-Type': 'application/json',
       'HTTP-Referer': toAscii(referer || event.headers['referer'] || ''),
       'X-Title': toAscii(title || ''),
@@ -48,12 +48,12 @@ exports.handler = async (event) => {
     // Timeout wrapper using AbortController
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
-    console.log('[chat] calling OpenRouter', { model, temperature, len: JSON.stringify(messages).length });
-    const resp = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
+    console.log('[chat] calling Gemini', { model, temperature, len: JSON.stringify(messages).length });
+    const resp = await fetch(`${GEMINI_BASE}/chat/completions`, {
       method: 'POST',
       headers,
       body: JSON.stringify({
-        model: typeof model === 'string' && model.trim() ? model : 'deepseek/deepseek-chat-v3.1:free',
+        model: typeof model === 'string' && model.trim() ? model : 'gemini-2.0-flash',
         temperature: typeof temperature === 'number' ? temperature : 0.2,
         messages,
       }),
@@ -71,4 +71,3 @@ exports.handler = async (event) => {
     return { statusCode: 500, headers: baseHeaders, body: JSON.stringify({ error: 'proxy_error', message: err?.message || 'Unknown error' }) };
   }
 };
-
