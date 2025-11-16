@@ -1,0 +1,17 @@
+{
+  "name": "chat-proxy",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Minimal Express proxy for Gemini chat requests",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

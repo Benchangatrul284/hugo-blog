@@ -1,9 +1,3 @@
 public/
-node_modules/
-package-lock.json
-package.json
-# Local Netlify folder
-.netlify
-
 server/.env
 server/node_modules/
