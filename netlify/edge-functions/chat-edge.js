@@ -13,8 +13,8 @@ export default async (request, context) => {
     }
 
     const toAscii = (v) => String(v || '').replace(/[^\x00-\x7F]/g, '');
-    const OPENROUTER_BASE = (globalThis.Netlify?.env?.get?.('OPENROUTER_API_BASE')) || 'https://openrouter.ai/api/v1';
-    const API_KEY = (globalThis.Netlify?.env?.get?.('OPENROUTER_API_KEY')) || (globalThis.Deno?.env?.get?.('OPENROUTER_API_KEY')) || '';
+    const GOOGLE_BASE = (globalThis.Netlify?.env?.get?.('OPENROUTER_API_BASE')) || ' https://generativelanguage.googleapis.com/v1beta/openai/';
+    const API_KEY = (globalThis.Netlify?.env?.get?.('GOOGLE_API_KEY')) || (globalThis.Deno?.env?.get?.('GOOGLE_API_KEY')) || '';
     if (!API_KEY) {
       return new Response(JSON.stringify({ error: 'missing_api_key' }), {
         status: 500,
@@ -30,7 +30,7 @@ export default async (request, context) => {
       'X-Title': toAscii(title || ''),
     };
 
-    const resp = await fetch(`${OPENROUTER_BASE}/chat/completions`, {
+    const resp = await fetch(`${GOOGLE_BASE}/chat/completions`, {
       method: 'POST',
       headers,
       body: JSON.stringify({

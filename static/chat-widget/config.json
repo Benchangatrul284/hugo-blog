@@ -1,9 +1,9 @@
 {
   "proxy_url": "/api/chat",
   "dev_proxy_url": "http://localhost:8787/api/chat",
-  "model": "openai/gpt-oss-20b:free",
+  "model": "gemini-2.5-flash",
   "models": [
-    "openai/gpt-oss-20b:free"
+    "gemini-2.5-flash"
   ],
   "temperature": 0.2
 }
